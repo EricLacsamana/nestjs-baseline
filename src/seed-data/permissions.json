@@ -1,0 +1,19 @@
+[
+    {
+      "name": "Create",
+      "description": "Permission to create resources"
+    },
+    {
+      "name": "Read",
+      "description": "Permission to read resources"
+    },
+    {
+      "name": "Update",
+      "description": "Permission to update resources"
+    },
+    {
+      "name": "Delete",
+      "description": "Permission to delete resources"
+    }
+  ]
+  
