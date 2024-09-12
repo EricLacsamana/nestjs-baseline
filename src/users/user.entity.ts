@@ -1,6 +1,7 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany } from 'typeorm';
-import { Role } from '../auth/role.entity';
-import { RefreshToken } from 'src/auth/refresh-token.entity';
+// src/users/user.entity.ts
+import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, OneToMany, JoinTable } from 'typeorm';
+import { RefreshToken } from '../auth/entities/refresh-token.entity';
+import { Role } from 'src/auth/entities/role.entity';
 
 @Entity()
 export class User {
@@ -19,12 +20,13 @@ export class User {
   @Column()
   name: string;
 
-  @ManyToMany(() => Role, role => role.users)
+  @ManyToMany(() => Role, role => role.users, { eager: true })
+  @JoinTable() 
   roles: Role[];
 
-  @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
+  @OneToMany(() => RefreshToken, refreshToken => refreshToken.user)
   refreshTokens: RefreshToken[];
 
-  @Column({ unique: true, nullable: true })
-  sub?: number;
+  // @Column({ unique: true, nullable: true })
+  // sub?: number;
 }

@@ -5,14 +5,14 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
-import { Role } from './auth/role.entity';
-import { Module as ModuleEntity } from './auth/module.entity';
-import { RolePermission } from './auth/role-permission.entity';
+import { Role } from './auth/entities/role.entity';
+// import { RolePermission } from './auth/entities/role-permission.entity';
+// import { Resource } from './auth/entities/resource.entity';
 import { User } from './users/user.entity';
-import { Action } from './auth/action.entity';
-import { SeedService } from './auth/seed.service';
-import { Permission } from './auth/permission.entity';
-import { Resource } from './auth/resource.entity';
+import { Action } from './auth/entities/action.entity';
+import { SeedService } from './seed/seed.service';
+
+
 
 @Module({
   imports: [
@@ -27,11 +27,11 @@ import { Resource } from './auth/resource.entity';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [Role, ModuleEntity, Permission, RolePermission, Resource, Action, User],
+      // entities: [User, Role],
       autoLoadEntities: true,
       synchronize: true,
     }),
-    TypeOrmModule.forFeature([User, Role, Action]),
+    TypeOrmModule.forFeature([User, Role]),
     AuthModule,
     UsersModule,
   ],

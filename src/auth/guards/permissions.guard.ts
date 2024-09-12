@@ -1,12 +1,13 @@
 import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
-import { PermissionsService } from './permissions.service';
+import { RolePermissionsService } from '../services/role-permissions.service';
+
 
 @Injectable()
 export class PermissionsGuard implements CanActivate {
   constructor(
     private readonly reflector: Reflector,
-    private readonly permissionsService: PermissionsService,
+    private readonly permissionsService: RolePermissionsService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

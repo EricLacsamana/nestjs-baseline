@@ -4,16 +4,22 @@ import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
 import { HttpExceptionFilter } from './common/filters/http-exception.filter';
-import { SeedService } from './auth/seed.service';
+// import { SeedService } from './seed/seed.service';
 
 dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  const seedService = app.get(SeedService);
-  await seedService.onModuleInit();
-  console.log('Seeding complete');
+  // const seedService = app.get(SeedService);
+  // try {
+  //   await seedService.seed();
+  // } catch (error) {
+  //   console.error('Error seeding data:', error);
+  // } finally {
+  //   await app.close();
+  // }
+ 
 
   app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
   app.useGlobalFilters(new HttpExceptionFilter());

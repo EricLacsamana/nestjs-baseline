@@ -11,10 +11,10 @@ import { HttpService } from '@nestjs/axios';
 import * as bcrypt from 'bcrypt';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { User } from '../users/user.entity';
+import { User } from '../../users/user.entity';
 import { UsersService } from 'src/users/users.service';
-import { RegisterDto } from './dto/register.dto';
-import { RefreshToken } from './refresh-token.entity';
+import { RegisterDto } from '../dto/register.dto';
+import { RefreshToken } from '../entities/refresh-token.entity';
 import { parseDuration } from 'src/utils/timeParser';
 
 @Injectable()
@@ -46,13 +46,14 @@ export class AuthService {
 
   async register(registerDto: RegisterDto): Promise<User> {
     try {
-      const { username, email, password, name } = registerDto;
+      const { username, email, password, name, roles } = registerDto;
       const hashedPassword = await bcrypt.hash(password, 10);
       return await this.usersService.create({
         username,
         email,
         password: hashedPassword,
         name,
+        roles,
       });
     } catch (error) {
       this.logger.error('Registration failed', error.stack);

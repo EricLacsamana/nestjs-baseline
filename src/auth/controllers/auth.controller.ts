@@ -8,9 +8,9 @@ import {
   Post,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthService } from 'src/auth/auth.service';
-import { RegisterDto } from './dto/register.dto';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { AuthService } from 'src/auth/services/auth.service';
+import { RegisterDto } from '../dto/register.dto';
+import { RefreshTokenDto } from '../dto/refresh-token.dto';
 
 @Controller('auth')
 export class AuthController {

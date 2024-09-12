@@ -2,18 +2,15 @@ import { Client } from 'pg';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
+// Load environment variables from .env file
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
-
-console.log('DATABASE_NAME:', process.env.DATABASE_NAME);
-
-async function createDatabase() {
+async function deleteDatabase() {
   const client = new Client({
     host: process.env.DATABASE_HOST || 'localhost',
     port: parseInt(process.env.DATABASE_PORT || '5432', 10),
     user: process.env.DATABASE_USER || 'postgres',
     password: process.env.DATABASE_PASSWORD || 'password',
-    database: 'postgres', // Connect to the default database
   });
 
   try {
@@ -25,22 +22,22 @@ async function createDatabase() {
       throw new Error('DATABASE_NAME is not defined in environment variables.');
     }
 
-    try {
-      await client.query(`CREATE DATABASE "${databaseName}"`);
-      console.log(`Database "${databaseName}" created successfully.`);
-    } catch (createError) {
-      if (createError.code === '42P04') {
-        console.log(`Database "${databaseName}" already exists.`);
-      } else {
-        throw createError;
-      }
-    }
+    // Terminate connections to the database
+    await client.query(`
+      SELECT pg_terminate_backend(pid)
+      FROM pg_stat_activity
+      WHERE datname = '${databaseName}' AND pid <> pg_backend_pid();
+    `);
+
+    // Drop the database
+    await client.query(`DROP DATABASE IF EXISTS "${databaseName}";`);
+    console.log(`Database "${databaseName}" dropped successfully.`);
   } catch (err) {
-    console.error('Error creating database:', err);
+    console.error('Error deleting database:', err);
   } finally {
     await client.end();
     console.log('Disconnected from PostgreSQL server.');
   }
 }
 
-createDatabase();
+deleteDatabase();

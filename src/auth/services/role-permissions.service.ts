@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Repository } from 'typeorm';
-import { User } from '../users/user.entity';
-import { Role } from './role.entity';
-import { RolePermission } from './role-permission.entity';
-import { Resource } from './resource.entity';
-import { Action } from './action.entity';
-import { UpdatePermissionsDto } from './dto/update-permissions.dto';
+import { User } from '../../users/user.entity';
+import { Role } from '../entities/role.entity';
+import { RolePermission } from '../entities/role-permission.entity';
+import { Resource } from '../entities/resource.entity';
+import { Action } from '../entities/action.entity';
+import { UpdatePermissionsDto } from '../dto/update-permissions.dto';
 
 @Injectable()
-export class PermissionsService {
+export class RolePermissionsService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
@@ -33,7 +33,7 @@ export class PermissionsService {
 
   async getRolePermissions(roleId: number): Promise<RolePermission[]> {
     return this.rolePermissionRepository.find({
-      where: { role: { id: roleId } },
+      // where: { role: { id: roleId } },
       relations: ['resource', 'action'],
     });
   }
@@ -41,9 +41,8 @@ export class PermissionsService {
   async updatePermissions(updatePermissionsDto: UpdatePermissionsDto[]): Promise<void> {
     const rolePermissions = updatePermissionsDto.map(dto => {
       return this.rolePermissionRepository.create({
-        role: { id: dto.roleId },
+        // role: { id: dto.roleId },
         resource: { id: dto.resourceId },
-        action: { id: dto.actionId },
       });
     });
 
@@ -83,9 +82,8 @@ export class PermissionsService {
     // Check for permissions for these roles
     const rolePermissions = await this.rolePermissionRepository.find({
       where: {
-        role: { id: In(roleIds) },
+        // role: { id: In(roleIds) },
         resource: { id: resource.id },
-        action: { id: action.id },
       },
     });
 

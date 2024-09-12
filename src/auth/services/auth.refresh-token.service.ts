@@ -8,8 +8,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { Repository } from 'typeorm';
 import { User } from 'src/users/user.entity';
-import { RefreshToken } from './refresh-token.entity';
-import { RefreshTokenDto } from './dto/refresh-token.dto';
+import { RefreshToken } from '../entities/refresh-token.entity';
+import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import { parseDurationInMs } from 'src/utils/durationInMsParser';
 
 @Injectable()

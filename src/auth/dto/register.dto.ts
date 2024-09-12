@@ -4,6 +4,9 @@ import {
   IsOptional,
   Length,
   IsNotEmpty,
+  IsArray,
+  ArrayNotEmpty,
+  IsIn,
 } from 'class-validator';
 
 export class RegisterDto {
@@ -24,4 +27,10 @@ export class RegisterDto {
   @IsString()
   @Length(1, 50)
   name?: string;
+
+  @IsOptional()
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsString({ each: true })
+  roles?: string[]; // Array of role identifiers or names
 }
