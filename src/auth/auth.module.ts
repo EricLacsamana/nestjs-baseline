@@ -11,7 +11,6 @@ import { User } from 'src/users/user.entity';
 import { RefreshToken } from './entities/refresh-token.entity';
 import { HttpModule } from '@nestjs/axios';
 
-
 @Module({
   imports: [
     HttpModule,

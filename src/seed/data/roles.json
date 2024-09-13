@@ -1,15 +1,14 @@
 [
-    {
-      "name": "Super Admin",
-      "identifier": "super-admin"
-    },
-    {
-      "name": "Admin",
-      "identifier": "admin"
-    },
-    {
-      "name": "User",
-      "identifier": "user"
-    }
-  ]
-  
+  {
+    "name": "Super Admin",
+    "identifier": "super-admin"
+  },
+  {
+    "name": "Admin",
+    "identifier": "admin"
+  },
+  {
+    "name": "User",
+    "identifier": "user"
+  }
+]

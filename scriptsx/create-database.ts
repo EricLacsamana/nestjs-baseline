@@ -4,7 +4,6 @@ import * as path from 'path';
 
 dotenv.config({ path: path.resolve(__dirname, '..', '.env') });
 
-
 console.log('DATABASE_NAME:', process.env.DATABASE_NAME);
 
 async function createDatabase() {

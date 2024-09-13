@@ -41,24 +41,19 @@ export class AuthService {
   getUserPermissions(): Observable<string[]> {
     return this.httpService
       .get<string[]>('/api/permissions')
-      .pipe(map(response => response.data));
+      .pipe(map((response) => response.data));
   }
 
   async register(registerDto: RegisterDto): Promise<User> {
-    try {
-      const { username, email, password, name, roles } = registerDto;
-      const hashedPassword = await bcrypt.hash(password, 10);
-      return await this.usersService.create({
-        username,
-        email,
-        password: hashedPassword,
-        name,
-        roles,
-      });
-    } catch (error) {
-      this.logger.error('Registration failed', error.stack);
-      throw new InternalServerErrorException('Failed to register user');
-    }
+    const { username, email, password, name, roles } = registerDto;
+
+    return await this.usersService.create({
+      username,
+      email,
+      password,
+      name,
+      roles,
+    });
   }
 
   async validateUser(username: string, password: string): Promise<User | null> {

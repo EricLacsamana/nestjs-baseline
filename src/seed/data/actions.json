@@ -1,15 +1,14 @@
 [
-    {
-      "name": "create"
-    },
-    {
-      "name": "read"
-    },
-    {
-      "name": "update"
-    },
-    {
-      "name": "delete"
-    }
-  ]
-  
+  {
+    "name": "create"
+  },
+  {
+    "name": "read"
+  },
+  {
+    "name": "update"
+  },
+  {
+    "name": "delete"
+  }
+]

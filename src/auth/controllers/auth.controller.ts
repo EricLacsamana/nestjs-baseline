@@ -7,12 +7,15 @@ import {
   Logger,
   Post,
   UnauthorizedException,
+  UseFilters,
 } from '@nestjs/common';
 import { AuthService } from 'src/auth/services/auth.service';
 import { RegisterDto } from '../dto/register.dto';
-import { RefreshTokenDto } from '../dto/refresh-token.dto';
+// import { RefreshTokenDto } from '../dto/refresh-token.dto';
+import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
 
 @Controller('auth')
+@UseFilters(HttpExceptionFilter)
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
@@ -22,16 +25,7 @@ export class AuthController {
   @Post('register')
   async register(@Body() body: RegisterDto) {
     this.logger.log('Registering user');
-    try {
-      const user = await this.authService.register(body);
-      return { user };
-    } catch (error) {
-      this.logger.error('Registration failed', error.stack);
-      throw new HttpException(
-        'Failed to register user',
-        HttpStatus.BAD_REQUEST,
-      );
-    }
+    return this.authService.register(body);
   }
 
   @HttpCode(HttpStatus.OK)
@@ -39,31 +33,18 @@ export class AuthController {
   async login(@Body() body: { username: string; password: string }) {
     this.logger.log(`Logging in user: ${body.username}`);
 
-    try {
-      const user = await this.authService.validateUser(
-        body.username,
-        body.password,
-      );
+    const user = await this.authService.validateUser(
+      body.username,
+      body.password,
+    );
 
-      if (!user) {
-        this.logger.warn('Invalid credentials for user: ' + body.username);
-        throw new UnauthorizedException('Invalid credentials');
-      }
-
-      const tokens = await this.authService.login(user);
-      return tokens;
-    } catch (error) {
-      this.logger.error('Login failed', error.stack);
-
-      if (error instanceof UnauthorizedException) {
-        throw error;
-      }
-
-      throw new HttpException(
-        'Failed to login',
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
+    if (!user) {
+      this.logger.warn('Invalid credentials for user: ' + body.username);
+      throw new UnauthorizedException('Invalid credentials');
     }
+
+    const tokens = await this.authService.login(user);
+    return tokens;
   }
 
   @HttpCode(HttpStatus.OK)
@@ -86,11 +67,6 @@ export class AuthController {
   async refreshTokens(
     @Body() refreshTokenDto,
   ): Promise<{ accessToken: string }> {
-    try {
-      return await this.authService.refreshTokens(refreshTokenDto);
-    } catch (error) {
-      this.logger.error('Failed to refresh tokens', error.stack);
-      throw new HttpException(error.message, HttpStatus.UNAUTHORIZED);
-    }
+    return await this.authService.refreshTokens(refreshTokenDto);
   }
 }

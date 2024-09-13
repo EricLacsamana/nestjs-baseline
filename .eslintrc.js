@@ -1,29 +1,42 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    project: 'tsconfig.json',
+    project: './tsconfig.json',
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'prettier'],
   extends: [
+    'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
-    'plugin:prettier/recommended',
-    'prettier/@typescript-eslint',
+    'plugin:prettier/recommended', // Includes Prettier rules
   ],
   root: true,
   env: {
     node: true,
     jest: true,
+    es2020: true,
   },
-  ignorePatterns: ['.eslintrc.js'],
+  ignorePatterns: ['.eslintrc.js', 'dist/', 'node_modules/'],
   rules: {
-    '@typescript-eslint/interface-name-prefix': 'off',
+    // Remove ESLint formatting rules
+    'indent': 'off', // Disable base indent rule
+    '@typescript-eslint/indent': 'off', // Disable TypeScript-specific indent rule
+
+    // Keep other ESLint rules for code quality
+    '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-explicit-any': 'warn', // Changed to 'warn'
-    'prettier/prettier': 'error', // Enforce Prettier formatting as errors
+    '@typescript-eslint/no-explicit-any': 'warn',
     'no-console': 'warn',
-    'no-unused-vars': ['warn', { argsIgnorePattern: '^_' }], // Ignore unused vars that start with '_'
+    'quotes': ['error', 'single'],
+    'semi': ['error', 'always'],
+    'max-len': ['warn', { code: 120 }],
+    'brace-style': ['error', '1tbs'],
+    'eol-last': ['error', 'always'],
+    'arrow-parens': ['error', 'always'],
+
+    // Prettier rules are enforced by the plugin:prettier/recommended
+    'prettier/prettier': 'error',
   },
 };

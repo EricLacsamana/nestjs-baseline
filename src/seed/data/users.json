@@ -1,19 +1,18 @@
 [
-    {
-      "username": "johndoe",
-      "email": "johndoe@example.com",
-      "password": "hashed_password_1",
-      "name": "John Doe",
-      "roles": ["admin", "user"], 
-      "sub": 12345
-    },
-    {
-      "username": "janedoe",
-      "email": "janedoe@example.com",
-      "password": "hashed_password_2",
-      "name": "Jane Doe",
-      "roles": ["user"],
-      "sub": 67890
-    }
-  ]
-  
+  {
+    "username": "johndoe",
+    "email": "johndoe@example.com",
+    "password": "hashed_password_1",
+    "name": "John Doe",
+    "roles": ["admin", "user"],
+    "sub": 12345
+  },
+  {
+    "username": "janedoe",
+    "email": "janedoe@example.com",
+    "password": "hashed_password_2",
+    "name": "Jane Doe",
+    "roles": ["user"],
+    "sub": 67890
+  }
+]

@@ -3,7 +3,9 @@ import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as dotenv from 'dotenv';
 import { AppModule } from './app.module';
-import { HttpExceptionFilter } from './common/filters/http-exception.filter';
+
+import { AllExceptionsFilter } from './filters/all-exception.filter';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 // import { SeedService } from './seed/seed.service';
 
 dotenv.config();
@@ -19,10 +21,10 @@ async function bootstrap() {
   // } finally {
   //   await app.close();
   // }
- 
 
-  app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
-  app.useGlobalFilters(new HttpExceptionFilter());
+  // app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+  app.useGlobalFilters(new HttpExceptionFilter(), new AllExceptionsFilter());
+
   app.enableCors({
     origin: process.env.WEB_URL,
     methods: 'GET,POST,PUT,DELETE,OPTIONS',

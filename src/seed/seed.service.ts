@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/user.entity';
-import { Role } from 'src/auth/entities/role.entity';
+import { Role } from 'src/roles/entities/role.entity';
 
 @Injectable()
 export class SeedService {
@@ -18,8 +18,8 @@ export class SeedService {
 
   async seed() {
     // Check if seeding is needed by verifying if roles and users exist
-    const rolesExist = await this.roleRepository.count() > 0;
-    const usersExist = await this.userRepository.count() > 0;
+    const rolesExist = (await this.roleRepository.count()) > 0;
+    const usersExist = (await this.userRepository.count()) > 0;
 
     if (rolesExist && usersExist) {
       this.logger.log('Database already seeded. Skipping seeding.');
@@ -30,7 +30,7 @@ export class SeedService {
     if (!rolesExist) {
       await this.seedRoles();
     }
-    
+
     if (!usersExist) {
       await this.seedUsers();
     }
@@ -46,7 +46,9 @@ export class SeedService {
     ];
 
     for (const roleData of roles) {
-      const existingRole = await this.roleRepository.findOne({ where: { identifier: roleData.identifier } });
+      const existingRole = await this.roleRepository.findOne({
+        where: { identifier: roleData.identifier },
+      });
       if (!existingRole) {
         const role = this.roleRepository.create(roleData);
         await this.roleRepository.save(role);
@@ -79,10 +81,14 @@ export class SeedService {
     ];
 
     for (const userData of users) {
-      const existingUser = await this.userRepository.findOne({ where: { username: userData.username } });
+      const existingUser = await this.userRepository.findOne({
+        where: { username: userData.username },
+      });
       if (!existingUser) {
         const hashedPassword = await bcrypt.hash(userData.password, 10);
-        const userRoles = roles.filter(role => userData.roles.includes(role.identifier));
+        const userRoles = roles.filter((role) =>
+          userData.roles.includes(role.identifier),
+        );
         const user = this.userRepository.create({
           ...userData,
           password: hashedPassword,

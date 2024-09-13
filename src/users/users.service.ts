@@ -1,13 +1,13 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 import { User } from './user.entity';
 import { CreateUserDto } from './interfaces/user-create.interface';
 import { UsernameAlreadyExistsException } from 'src/common/exceptions/username-already-exist.exception';
 import { EmailAlreadyExistsException } from 'src/common/exceptions/email-already-exist.exception';
-import { Role } from 'src/auth/entities/role.entity';
-import { RolesService } from 'src/auth/services/roles.service';
-import { RolePermission } from 'src/auth/entities/role-permission.entity';
+import { Role } from 'src/roles/entities/role.entity';
+import { RolesService } from 'src/roles/services/roles.service';
 
 @Injectable()
 export class UsersService {
@@ -33,38 +33,43 @@ export class UsersService {
     name,
     roles: roleParams, // Expecting role identifiers
   }: CreateUserDto): Promise<User> {
-    let existingUser = await this.findOneByUsername(username);
+    const existingUser = await this.usersRepository.findOne({
+      where: [{ username: username }, { email: email }],
+    });
 
     if (existingUser) {
-      throw new UsernameAlreadyExistsException();
+      if (username && existingUser.username === username) {
+        throw new UsernameAlreadyExistsException();
+      }
+      if (email && existingUser.email === email) {
+        throw new EmailAlreadyExistsException();
+      }
     }
 
-    existingUser = await this.findOneByEmail(email);
-
-    if (existingUser) {
-      throw new EmailAlreadyExistsException();
-    }
-
-    let roles: Role [];
+    let roles: Role[];
 
     if (roleParams.length) {
-      
-      roles = await Promise.all(roleParams.map((roleParam)=> this.rolesService.getRoleWithPermissions(roleParam)))
+      roles = await Promise.all(
+        roleParams.map((roleParam) =>
+          this.rolesService.getRoleWithPermissions(roleParam),
+        ),
+      );
 
       if (roles.length !== roleParams.length) {
         throw new NotFoundException('One or more roles not found');
       }
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const user = this.usersRepository.create({
       username,
       email,
-      password,
+      password: hashedPassword,
       name,
       roles,
     });
-    console.log('new USER', user);
+
     return this.usersRepository.save(user);
   }
 
