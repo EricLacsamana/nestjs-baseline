@@ -9,17 +9,22 @@ import {
   UnauthorizedException,
   UseFilters,
 } from '@nestjs/common';
+
 import { AuthService } from 'src/auth/services/auth.service';
-import { RegisterDto } from '../dto/register.dto';
-// import { RefreshTokenDto } from '../dto/refresh-token.dto';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
+
+import { RegisterDto } from '../dto/register.dto';
+import { RefreshTokenService } from '../services/refresh-token.service';
 
 @Controller('auth')
 @UseFilters(HttpExceptionFilter)
 export class AuthController {
   private readonly logger = new Logger(AuthController.name);
 
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService,
+    private readonly refreshTokenService: RefreshTokenService,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('register')
@@ -65,8 +70,8 @@ export class AuthController {
   @HttpCode(HttpStatus.OK)
   @Post('refresh')
   async refreshTokens(
-    @Body() refreshTokenDto,
-  ): Promise<{ accessToken: string }> {
-    return await this.authService.refreshTokens(refreshTokenDto);
+    @Body() refreshTokenDto: { refreshToken: string },
+  ): Promise<{ accessToken: string; refreshToken: string }> {
+    return this.refreshTokenService.refreshTokens(refreshTokenDto);
   }
 }

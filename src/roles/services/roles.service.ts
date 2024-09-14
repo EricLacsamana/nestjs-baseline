@@ -1,9 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
+
+import { isParsableToInt } from 'src/utils/helpers';
+
 import { Role } from '../../roles/entities/role.entity';
 import { RolePermission } from '../entities/role-permission.entity';
-import { isParsableToInt } from 'src/utils/helpers';
 
 @Injectable()
 export class RolesService {

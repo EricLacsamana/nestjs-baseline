@@ -1,4 +1,4 @@
-import { IsInt, IsNotEmpty, IsOptional, IsBoolean } from 'class-validator';
+import { IsBoolean, IsInt, IsNotEmpty, IsOptional } from 'class-validator';
 
 export class UpdatePermissionsDto {
   @IsInt()

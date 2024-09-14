@@ -1,13 +1,14 @@
 // src/auth/action.entity.ts
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
   ManyToMany,
   OneToMany,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-// import { Module } from './module.entity';
+
 import { RolePermission } from '../../roles/entities/role-permission.entity';
+// import { Module } from './module.entity';
 import { Resource } from './resource.entity';
 
 @Entity()

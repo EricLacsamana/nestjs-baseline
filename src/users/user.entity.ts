@@ -1,14 +1,15 @@
-// src/users/user.entity.ts
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
-  JoinTable,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
-import { RefreshToken } from '../auth/entities/refresh-token.entity';
+
 import { Role } from 'src/roles/entities/role.entity';
+
+import { RefreshToken } from '../auth/entities/refresh-token.entity';
 
 @Entity()
 export class User {

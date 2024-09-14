@@ -1,12 +1,14 @@
-import { User } from 'src/users/user.entity';
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
+  Entity,
+  JoinTable,
   ManyToMany,
   OneToMany,
-  JoinTable,
+  PrimaryGeneratedColumn,
 } from 'typeorm';
+
+import { User } from 'src/users/user.entity';
+
 import { RolePermission } from './role-permission.entity';
 
 @Entity()

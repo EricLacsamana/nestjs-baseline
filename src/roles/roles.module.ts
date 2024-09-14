@@ -1,10 +1,11 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { Role } from './entities/role.entity';
-import { RolesController } from './controllers/roles.controller';
-import { RolePermission } from 'src/roles/entities/role-permission.entity';
-import { RolesService } from 'src/roles/services/roles.service';
 import { JwtModule } from '@nestjs/jwt';
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+import { RolePermission } from '../roles/entities/role-permission.entity';
+import { RolesService } from '../roles/services/roles.service';
+import { RolesController } from './controllers/roles.controller';
+import { Role } from './entities/role.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Role, RolePermission]), JwtModule],

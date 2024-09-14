@@ -1,5 +1,6 @@
 // role-permission.entity.ts
-import { Entity, PrimaryGeneratedColumn, ManyToOne, Column } from 'typeorm';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { Role } from './role.entity';
 
 @Entity()

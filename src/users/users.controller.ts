@@ -6,18 +6,20 @@ import {
   Req,
   UseGuards,
 } from '@nestjs/common';
+
+import { AuthGuards } from 'src/auth/guards/auth.guard';
+
 import { UsersService } from './users.service';
-import { AuthGuard } from 'src/auth/guards/auth.guard';
 
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  // Use AuthGuard to Get User State
-  @UseGuards(AuthGuard)
+  // Use AuthGuards to Get User State
+  @UseGuards(AuthGuards)
   async getProfile(@Req() req) {
-    const userId = req.user.sub;
+    const userId = req.user.id;
 
     const user = await this.usersService.getUserProfile(userId);
 

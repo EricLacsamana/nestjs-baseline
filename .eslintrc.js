@@ -5,7 +5,7 @@ module.exports = {
     tsconfigRootDir: __dirname,
     sourceType: 'module',
   },
-  plugins: ['@typescript-eslint', 'prettier'],
+  plugins: ['@typescript-eslint', 'prettier', 'simple-import-sort'],
   extends: [
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
@@ -35,6 +35,22 @@ module.exports = {
     'brace-style': ['error', '1tbs'],
     'eol-last': ['error', 'always'],
     'arrow-parens': ['error', 'always'],
+
+    // Import order
+ "simple-import-sort/imports": [
+      "warn",
+      {
+        "groups": [
+          // External modules
+          ["^nest", "^@?\\w"],
+          // Internal imports from 'src'
+          ["^src/"],
+          // Remaining internal imports
+          ["^"]
+        ]
+      }
+    ],
+    "simple-import-sort/exports": "warn",
 
     // Prettier rules are enforced by the plugin:prettier/recommended
     'prettier/prettier': 'error',

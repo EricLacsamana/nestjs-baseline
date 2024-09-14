@@ -1,13 +1,15 @@
 import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
-import { User } from './user.entity';
-import { CreateUserDto } from './interfaces/user-create.interface';
-import { UsernameAlreadyExistsException } from 'src/common/exceptions/username-already-exist.exception';
+import { Repository } from 'typeorm';
+
 import { EmailAlreadyExistsException } from 'src/common/exceptions/email-already-exist.exception';
+import { UsernameAlreadyExistsException } from 'src/common/exceptions/username-already-exist.exception';
 import { Role } from 'src/roles/entities/role.entity';
 import { RolesService } from 'src/roles/services/roles.service';
+
+import { CreateUserDto } from './interfaces/user-create.interface';
+import { User } from './user.entity';
 
 @Injectable()
 export class UsersService {

@@ -1,5 +1,6 @@
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+
 import { User } from 'src/users/user.entity';
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
 
 @Entity()
 export class RefreshToken {
@@ -9,6 +10,18 @@ export class RefreshToken {
   @Column()
   token: string;
 
+  @Column({ nullable: true })
+  deviceId?: string;
+
+  @Column({ nullable: true })
+  deviceName?: string;
+
+  @Column({ nullable: true })
+  location?: string;
+
+  @Column({ default: false })
+  revoked: boolean;
+
   @ManyToOne(() => User, (user) => user.refreshTokens)
   user: User;
 
@@ -17,4 +30,7 @@ export class RefreshToken {
 
   @Column({ type: 'timestamp', nullable: true })
   expiresAt: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  lastUsedAt?: Date;
 }
