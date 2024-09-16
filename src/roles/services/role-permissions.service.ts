@@ -37,13 +37,13 @@ export class RolePermissionsService {
       );
     }
 
-    if (!role.rolePermissions) {
-      role.rolePermissions = [];
-    }
+    // if (!role.rolePermissions) {
+    //   role.rolePermissions = [];
+    // }
 
-    if (!role.rolePermissions.some((p) => p.id === permission.id)) {
-      role.rolePermissions.push(permission);
-    }
+    // if (!role.rolePermissions.some((p) => p.id === permission.id)) {
+    //   role.rolePermissions.push(permission);
+    // }
 
     return this.roleRepository.save(role);
   }
@@ -61,23 +61,23 @@ export class RolePermissionsService {
       throw new NotFoundException(`Role with ID ${roleId} not found`);
     }
 
-    role.rolePermissions = role.rolePermissions.filter(
-      (p) => p.id !== permissionId,
-    );
+    // role.rolePermissions = role.rolePermissions.filter(
+    //   (p) => p.id !== permissionId,
+    // );
 
     return this.roleRepository.save(role);
   }
 
-  async getRolePermissions(roleId: number): Promise<RolePermission[]> {
-    const role = await this.roleRepository.findOne({
-      where: { id: roleId },
-      relations: ['rolePermissions'],
-    });
+  // async getRolePermissions(roleId: number): Promise<RolePermission[]> {
+  //   const role = await this.roleRepository.findOne({
+  //     where: { id: roleId },
+  //     relations: ['rolePermissions'],
+  //   });
 
-    if (!role) {
-      throw new NotFoundException(`Role with ID ${roleId} not found`);
-    }
+  //   if (!role) {
+  //     throw new NotFoundException(`Role with ID ${roleId} not found`);
+  //   }
 
-    return role.rolePermissions;
-  }
+  //   return role.rolePermissions;
+  // }
 }

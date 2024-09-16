@@ -33,7 +33,7 @@ export class UsersService {
     email,
     password,
     name,
-    roles: roleParams, // Expecting role identifiers
+    roles: roleParams,
   }: CreateUserDto): Promise<User> {
     const existingUser = await this.usersRepository.findOne({
       where: [{ username: username }, { email: email }],
@@ -51,11 +51,14 @@ export class UsersService {
     let roles: Role[];
 
     if (roleParams.length) {
-      roles = await Promise.all(
-        roleParams.map((roleParam) =>
-          this.rolesService.getRoleWithPermissions(roleParam),
-        ),
-      );
+      // roles = await Promise.all(
+      //   roleParams.map((roleParam) =>
+      //     this.rolesService.findRole({
+      //       param: roleParam,
+      //       relations: ['rolePermissions'],
+      //     }),
+      //   ),
+      // );
 
       if (roles.length !== roleParams.length) {
         throw new NotFoundException('One or more roles not found');

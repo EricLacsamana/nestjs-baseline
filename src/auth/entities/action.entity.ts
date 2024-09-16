@@ -3,11 +3,11 @@ import {
   Column,
   Entity,
   ManyToMany,
-  OneToMany,
+  // OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
-import { RolePermission } from '../../roles/entities/role-permission.entity';
+// import { RolePermission } from '../../roles/entities/role-permission.entity';
 // import { Module } from './module.entity';
 import { Resource } from './resource.entity';
 

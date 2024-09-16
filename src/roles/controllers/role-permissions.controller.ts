@@ -28,19 +28,19 @@ export class RolePermissionsController {
   //   );
   // }
 
-  @Get(':roleId')
-  async getRolePermissions(@Param('roleId', ParseIntPipe) roleId: number) {
-    return this.rolePermissionsService.getRolePermissions(roleId);
-  }
+  // @Get(':roleId')
+  // async getRolePermissions(@Param('roleId', ParseIntPipe) roleId: number) {
+  //   return this.rolePermissionsService.getRolePermissions(roleId);
+  // }
 
-  @Delete('remove')
-  async removePermissionFromRole(
-    @Body('roleId', ParseIntPipe) roleId: number,
-    @Body('permissionId', ParseIntPipe) permissionId: number,
-  ) {
-    return this.rolePermissionsService.removePermissionFromRole(
-      roleId,
-      permissionId,
-    );
-  }
+  // @Delete('remove')
+  // async removePermissionFromRole(
+  //   @Body('roleId', ParseIntPipe) roleId: number,
+  //   @Body('permissionId', ParseIntPipe) permissionId: number,
+  // ) {
+  //   return this.rolePermissionsService.removePermissionFromRole(
+  //     roleId,
+  //     permissionId,
+  //   );
+  // }
 }
