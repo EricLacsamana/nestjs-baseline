@@ -1,8 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, SelectQueryBuilder } from 'typeorm';
 
 import { QueryParsingService } from 'src/common/services/query-parsing.service';
+import { getRelationsFromInclude } from 'src/common/utils/relation-utils';
 import { RequestContextService } from 'src/request-context/request-context.service';
 
 import { Role } from '../../roles/entities/role.entity';
@@ -23,18 +24,12 @@ export class RolesService {
     private readonly rolePermissionRepository: Repository<
       RolePermission & { permissions: RolePermission[] }
     >,
-    // private readonly queryParsingService: QueryParsingService,
   ) {}
 
-  async findRoleByParam(param: string, includes: string[] = []): Promise<Role> {
+  async findRoleByParam(param: string): Promise<Role> {
     const queryBuilder = this.roleRepository.createQueryBuilder('role');
 
-    // Add relations if provided
-    // if (includes.length > 0) {
-    //   this.queryParsingService.addRelations(queryBuilder, 'role', includes);
-    // }
-
-    // Determine if the param is numeric or a string
+    // Handle role filtering based on the parameter
     const roleId = parseInt(param, 10);
     if (!isNaN(roleId)) {
       queryBuilder.where('role.id = :id', { id: roleId });
@@ -44,6 +39,7 @@ export class RolesService {
       });
     }
 
+    // Fetch the role with the requested relations
     const role = await queryBuilder.getOne();
 
     if (!role) {
@@ -54,8 +50,21 @@ export class RolesService {
 
     return role;
   }
-  async findRole(param: string): Promise<Role> {
-    const role = null;
+  async findRole(param: string, relations: any): Promise<Role> {
+    const roleId = parseInt(param, 10);
+
+    let role: Role;
+    if (!isNaN(roleId)) {
+      role = await this.roleRepository.findOne({
+        where: { id: roleId },
+        relations,
+      });
+    } else {
+      role = await this.roleRepository.findOne({
+        where: { identifier: param },
+        relations,
+      });
+    }
 
     if (!role) {
       throw new NotFoundException(

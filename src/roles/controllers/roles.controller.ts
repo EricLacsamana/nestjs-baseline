@@ -1,7 +1,8 @@
-import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
 
 import { AuthGuards } from 'src/auth/guards/auth.guard';
 import { QueryHelperService } from 'src/common/services/query-helper.service';
+import { Permissions } from 'src/permissions/permissions.decorator';
 import { Role } from 'src/roles/entities/role.entity';
 import { RolesService } from 'src/roles/services/roles.service';
 
@@ -14,19 +15,12 @@ export class RolesController {
 
   @Get(':id')
   @UseGuards(AuthGuards)
+  @Permissions({ action: 'GET_ROLE' })
   async getRoleWithPermissions(
     @Param('id') id: string,
-    @Query('include') include: string,
+    @Query('relations') relations: any,
   ): Promise<Role> {
-    const includeParams = this.queryHelperService.parseIncludeParam(include);
-    const { relations, nestedRelations } = includeParams;
-    console.log('include', include);
-    const role = this.roleService.findRole(id);
-    return role;
-    // return this.roleService.findRole({
-    //   param: id,
-    //   relations,
-    //   nestedRelations,
-    // });
+    console.log('test', relations);
+    return this.roleService.findRole(id, relations);
   }
 }

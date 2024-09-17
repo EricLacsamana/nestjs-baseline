@@ -28,13 +28,14 @@ export class User {
   @Column()
   name: string;
 
-  @ManyToMany(() => Role, (role) => role.users, { eager: true })
+  @ManyToMany(() => Role, (role) => role.users)
   @JoinTable()
   roles: Role[];
 
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
   refreshTokens: RefreshToken[];
 
+  // Optional: If you want to use a unique and nullable identifier
   // @Column({ unique: true, nullable: true })
   // sub?: number;
 }

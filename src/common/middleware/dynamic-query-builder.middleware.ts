@@ -19,7 +19,6 @@ export class DynamicQueryBuilderMiddleware implements NestMiddleware {
   ) {}
 
   async use(req: Request, res: Response, next: NextFunction): Promise<void> {
-    // Get entity name from query or route path
     const entityName = req.query.entity
       ? (req.query.entity as string)
       : this.getEntityNameFromPath(req.path);
@@ -54,7 +53,7 @@ export class DynamicQueryBuilderMiddleware implements NestMiddleware {
         : [];
       if (include.length > 0) {
         try {
-          this.queryParsingService.addRelations(
+          await this.queryParsingService.addRelations(
             queryBuilder,
             singularEntityName,
             include,

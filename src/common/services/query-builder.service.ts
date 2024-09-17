@@ -6,31 +6,14 @@ export class QueryBuilderService {
   async addNestedRelations(
     queryBuilder: SelectQueryBuilder<any>,
     alias: string,
-    nestedRelations: Record<string, string[]>,
+    nestedRelations: Record<string, any>,
   ): Promise<void> {
-    for (const [relation, nested] of Object.entries(nestedRelations)) {
-      if (nested.length > 0) {
-        queryBuilder.leftJoinAndSelect(`${alias}.${relation}`, relation);
-        await this.addNestedRelations(
-          queryBuilder,
-          relation,
-          this.buildNestedRelations(nested),
-        );
-      }
-    }
-  }
+    Object.entries(nestedRelations).forEach(([relation, nested]) => {
+      queryBuilder.leftJoinAndSelect(`${alias}.${relation}`, relation);
 
-  private buildNestedRelations(nested: string[]): Record<string, string[]> {
-    const result: Record<string, string[]> = {};
-    nested.forEach((relation) => {
-      const [rel, subRel] = relation.split('.');
-      if (!result[rel]) {
-        result[rel] = [];
-      }
-      if (subRel) {
-        result[rel].push(subRel);
+      if (typeof nested === 'object' && !Array.isArray(nested)) {
+        this.addNestedRelations(queryBuilder, relation, nested);
       }
     });
-    return result;
   }
 }

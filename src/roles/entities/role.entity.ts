@@ -27,6 +27,5 @@ export class Role {
   users: User[];
 
   @OneToMany(() => RolePermission, (rolePermission) => rolePermission.role)
-  @JoinTable()
   rolePermissions: RolePermission[];
 }

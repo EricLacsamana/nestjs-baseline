@@ -22,39 +22,41 @@ export class QueryParsingService {
       this.dataSource.getRepository(entityClass);
     const entityMetadata = repository.metadata;
 
-    relations.forEach((relation) => {
-      const [relationPath, nestedRelation] = relation.split('.');
-      const relationExists = this.doesRelationExist(
-        entityMetadata,
-        relationPath,
-      );
+    const nestedRelations = this.buildNestedRelations(relations);
 
-      if (!relationExists) {
-        throw new Error(
-          `Relation "${relationPath}" not found in entity "${entityName}"`,
-        );
+    for (const [relation, nested] of Object.entries(nestedRelations)) {
+      queryBuilder.leftJoinAndSelect(`${entityName}.${relation}`, relation);
+
+      if (nested.length > 0) {
+        await this.addNestedRelations(queryBuilder, relation, nested);
       }
-
-      queryBuilder.leftJoinAndSelect(
-        `${entityName}.${relationPath}`,
-        relationPath,
-      );
-
-      if (nestedRelation) {
-        queryBuilder.leftJoinAndSelect(
-          `${relationPath}.${nestedRelation}`,
-          nestedRelation,
-        );
-      }
-    });
+    }
   }
 
-  private doesRelationExist(
-    entityMetadata: any,
-    relationPath: string,
-  ): boolean {
-    return entityMetadata.relations.some(
-      (rel: any) => rel.propertyName === relationPath,
-    );
+  private buildNestedRelations(relations: string[]): Record<string, string[]> {
+    const result: Record<string, string[]> = {};
+    relations.forEach((relation) => {
+      const [rel, subRel] = relation.split('.');
+      if (!result[rel]) {
+        result[rel] = [];
+      }
+      if (subRel) {
+        result[rel].push(subRel);
+      }
+    });
+    return result;
+  }
+
+  private async addNestedRelations(
+    queryBuilder: SelectQueryBuilder<any>,
+    alias: string,
+    nestedRelations: string[],
+  ): Promise<void> {
+    for (const nestedRelation of nestedRelations) {
+      queryBuilder.leftJoinAndSelect(
+        `${alias}.${nestedRelation}`,
+        nestedRelation,
+      );
+    }
   }
 }

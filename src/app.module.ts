@@ -7,7 +7,9 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { AuthenticationMiddleware } from './common/middleware/authentication.middleware';
 import { DynamicQueryBuilderMiddleware } from './common/middleware/dynamic-query-builder.middleware';
+import { RelationMiddleware } from './common/middleware/relation.middleware';
 import { QueryParsingService } from './common/services/query-parsing.service';
+import { PermissionsModule } from './permissions/permissions.module';
 import { RequestContextService } from './request-context/request-context.service';
 import { Role } from './roles/entities/role.entity';
 import { RolePermission } from './roles/entities/role-permission.entity';
@@ -43,6 +45,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     UsersModule,
     RolesModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [
@@ -63,7 +66,7 @@ export class AppModule {
     //   .forRoutes({ path: '*', method: RequestMethod.POST });
 
     consumer
-      .apply(DynamicQueryBuilderMiddleware) // Apply multiple middleware
+      .apply(RelationMiddleware) // Apply multiple middleware
       .forRoutes({ path: '*', method: RequestMethod.GET }); // Apply only to GET requests
   }
 }
