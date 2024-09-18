@@ -1,8 +1,8 @@
 import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 
+import { Action } from 'src/auth/decorators/action.decorator';
 import { AuthGuards } from 'src/auth/guards/auth.guard';
 import { QueryHelperService } from 'src/common/services/query-helper.service';
-import { Permissions } from 'src/permissions/permissions.decorator';
 import { Role } from 'src/roles/entities/role.entity';
 import { RolesService } from 'src/roles/services/roles.service';
 
@@ -15,7 +15,7 @@ export class RolesController {
 
   @Get(':id')
   @UseGuards(AuthGuards)
-  @Permissions({ action: 'GET_ROLE' })
+  @Action('GET_ROLE')
   async getRoleWithPermissions(
     @Param('id') id: string,
     @Query('relations') relations: any,
@@ -23,7 +23,8 @@ export class RolesController {
     return this.roleService.findRole(id, relations);
   }
 
-  @Permissions({ action: 'GET_ROLEX' })
+  @Get(':id')
+  @Action('GET_ROLEX')
   async getRole() {
     return [];
   }

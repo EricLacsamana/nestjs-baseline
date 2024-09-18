@@ -7,6 +7,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 
+import { Action } from 'src/auth/decorators/action.decorator';
 import { AuthGuards } from 'src/auth/guards/auth.guard';
 
 import { UsersService } from './users.service';
@@ -16,8 +17,9 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get('me')
-  // Use AuthGuards to Get User State
   @UseGuards(AuthGuards)
+  // Use AuthGuards to Get User State
+  @Action('GET_ME')
   async getProfile(@Req() req) {
     const userId = req.user.id;
 
@@ -31,6 +33,7 @@ export class UsersController {
   }
 
   @Get()
+  @Action('GET_ALL_USERS')
   async findAll() {
     return this.usersService.findAll();
   }

@@ -1,4 +1,9 @@
-import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
+import {
+  MiddlewareConsumer,
+  Module,
+  OnModuleInit,
+  RequestMethod,
+} from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
@@ -10,7 +15,8 @@ import { DynamicQueryBuilderMiddleware } from './common/middleware/dynamic-query
 import { RelationMiddleware } from './common/middleware/relation.middleware';
 import { QueryParsingService } from './common/services/query-parsing.service';
 import { env } from './config/config.sevice';
-import { PermissionsModule } from './permissions/permissions.module';
+import { ModuleDiscoveryModule } from './module-discovery/module-discovery.module';
+import { ModuleDiscoveryService } from './module-discovery/module-discovery.service';
 import { RequestContextService } from './request-context/request-context.service';
 import { Role } from './roles/entities/role.entity';
 import { RolePermission } from './roles/entities/role-permission.entity';
@@ -47,7 +53,7 @@ import { UsersModule } from './users/users.module';
     AuthModule,
     UsersModule,
     RolesModule,
-    PermissionsModule,
+    ModuleDiscoveryModule,
   ],
   controllers: [AppController],
   providers: [
@@ -57,10 +63,17 @@ import { UsersModule } from './users/users.module';
     RequestContextService,
   ],
 })
-export class AppModule {
-  constructor(private readonly seedService: SeedService) {
-    this.seedService.seed();
+export class AppModule implements OnModuleInit {
+  constructor(
+    private readonly moduleDiscoveryService: ModuleDiscoveryService,
+    private readonly seedService: SeedService,
+  ) {}
+
+  async onModuleInit() {
+    await this.seedService.seed(); // Ensure seeding logic is executed only once
+    await this.moduleDiscoveryService.discoverModules();
   }
+
   configure(consumer: MiddlewareConsumer) {
     // Apply AuthenticationMiddleware to POST requests
     // consumer

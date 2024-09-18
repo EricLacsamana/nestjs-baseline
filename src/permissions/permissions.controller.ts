@@ -6,13 +6,6 @@ import { PermissionsService } from './permissions.service';
 export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
-  @Get('generate')
-  async generatePermissions() {
-    return this.permissionsService.generateDynamicPermissions();
-  }
-
   @Get()
-  getPermissions() {
-    return this.permissionsService.getPermissions();
-  }
+  getPermissions() {}
 }
