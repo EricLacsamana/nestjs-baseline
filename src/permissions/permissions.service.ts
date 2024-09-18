@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { RequestMethod } from '@nestjs/common';
 import { METHOD_METADATA, PATH_METADATA } from '@nestjs/common/constants';
 import { ConfigService } from '@nestjs/config';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';
@@ -56,10 +57,7 @@ export class PermissionsService {
             controller.instance.constructor.name,
             methodName,
           );
-          const baseUrl = this.configService.get<string>(
-            'API_URL',
-            'http://localhost:4000',
-          );
+          const baseUrl = this.configService.get<string>('API_URL', 'API_URL');
 
           // Ensure the endpoint starts with a '/'
           const endpoint = routeMetadata.path.startsWith('/')
@@ -126,13 +124,15 @@ export class PermissionsService {
     // Ensure the path starts with a '/'
     const normalizedPath = path.startsWith('/') ? path : `/${path}`;
 
-    const method =
-      this.reflector.get<string>(METHOD_METADATA, prototype[methodName]) ||
-      'GET'; // Default to 'GET' if method is not defined
+    // Get the HTTP method from metadata
+    const method = this.reflector.get<RequestMethod>(
+      METHOD_METADATA,
+      prototype[methodName],
+    );
 
     return {
       path: normalizedPath || 'unknown',
-      method,
+      method: RequestMethod[method],
     };
   }
 

@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Query, Req, UseGuards } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 
 import { AuthGuards } from 'src/auth/guards/auth.guard';
 import { QueryHelperService } from 'src/common/services/query-helper.service';
@@ -20,7 +20,11 @@ export class RolesController {
     @Param('id') id: string,
     @Query('relations') relations: any,
   ): Promise<Role> {
-    console.log('test', relations);
     return this.roleService.findRole(id, relations);
+  }
+
+  @Permissions({ action: 'GET_ROLEX' })
+  async getRole() {
+    return [];
   }
 }
