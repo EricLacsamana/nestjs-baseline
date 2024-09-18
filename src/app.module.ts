@@ -9,6 +9,7 @@ import { AuthenticationMiddleware } from './common/middleware/authentication.mid
 import { DynamicQueryBuilderMiddleware } from './common/middleware/dynamic-query-builder.middleware';
 import { RelationMiddleware } from './common/middleware/relation.middleware';
 import { QueryParsingService } from './common/services/query-parsing.service';
+import { env } from './config/config.sevice';
 import { PermissionsModule } from './permissions/permissions.module';
 import { RequestContextService } from './request-context/request-context.service';
 import { Role } from './roles/entities/role.entity';
@@ -22,7 +23,8 @@ import { UsersModule } from './users/users.module';
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: '.env',
+      load: [() => env],
+      // envFilePath: '.env',
     }),
     TypeOrmModule.forRoot({
       type: process.env.DATABASE_TYPE as
