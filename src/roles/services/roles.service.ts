@@ -11,8 +11,8 @@ import { RolePermission } from '../../roles/entities/role-permission.entity';
 
 type RoleParams = {
   param: string;
-  relations: string[];
-  nestedRelations: Record<string, string[]>;
+  relations?: string[];
+  nestedRelations?: Record<string, string[]>;
 };
 
 @Injectable()
@@ -50,7 +50,7 @@ export class RolesService {
 
     return role;
   }
-  async findRole(param: string, relations: any): Promise<Role> {
+  async findRole({ param, relations }: RoleParams): Promise<Role> {
     const roleId = parseInt(param, 10);
 
     let role: Role;

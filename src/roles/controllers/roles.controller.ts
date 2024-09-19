@@ -20,7 +20,7 @@ export class RolesController {
     @Param('id') id: string,
     @Query('relations') relations: any,
   ): Promise<Role> {
-    return this.roleService.findRole(id, relations);
+    return this.roleService.findRole({ param: id, relations });
   }
 
   @Get(':id')

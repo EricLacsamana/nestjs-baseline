@@ -9,11 +9,13 @@ import {
   UnauthorizedException,
   UseFilters,
 } from '@nestjs/common';
+import { ApiResponse } from '@nestjs/swagger';
 
 import { AuthService } from 'src/auth/services/auth.service';
 import { HttpExceptionFilter } from 'src/filters/http-exception.filter';
 
 import { RegisterDto } from '../dto/register.dto';
+import { RegisterResponseDto } from '../dto/register-response.dto';
 import { RefreshTokenService } from '../services/refresh-token.service';
 
 @Controller('auth')
@@ -26,8 +28,14 @@ export class AuthController {
     private readonly refreshTokenService: RefreshTokenService,
   ) {}
 
-  @HttpCode(HttpStatus.OK)
+  @HttpCode(HttpStatus.CREATED)
   @Post('register')
+  @ApiResponse({
+    status: 201,
+    description: 'Registration Success',
+    type: RegisterResponseDto,
+  })
+  @ApiResponse({ status: 400, description: 'Invalid data' })
   async register(@Body() body: RegisterDto) {
     this.logger.log('Registering user');
     return this.authService.register(body);

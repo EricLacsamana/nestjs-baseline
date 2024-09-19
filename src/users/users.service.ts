@@ -51,14 +51,11 @@ export class UsersService {
     let roles: Role[];
 
     if (roleParams.length) {
-      // roles = await Promise.all(
-      //   roleParams.map((roleParam) =>
-      //     this.rolesService.findRole({
-      //       param: roleParam,
-      //       relations: ['rolePermissions'],
-      //     }),
-      //   ),
-      // );
+      roles = await Promise.all(
+        roleParams.map((roleParam) =>
+          this.rolesService.findRole({ param: roleParam }),
+        ),
+      );
 
       if (roles.length !== roleParams.length) {
         throw new NotFoundException('One or more roles not found');

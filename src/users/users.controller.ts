@@ -8,8 +8,11 @@ import {
 } from '@nestjs/common';
 
 import { Action } from 'src/auth/decorators/action.decorator';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { UserRole } from 'src/auth/enums/user-role.enum';
 import { AuthGuards } from 'src/auth/guards/auth.guard';
 
+import { UserAction } from './enums/user.action.enum';
 import { UsersService } from './users.service';
 
 @Controller('users')
@@ -18,8 +21,8 @@ export class UsersController {
 
   @Get('me')
   @UseGuards(AuthGuards)
-  // Use AuthGuards to Get User State
-  @Action('GET_ME')
+  @Roles(...Object.values(UserRole))
+  @Action(UserAction.GET_USER_PROFILE)
   async getProfile(@Req() req) {
     const userId = req.user.id;
 
@@ -33,12 +36,13 @@ export class UsersController {
   }
 
   @Get()
-  @Action('GET_ALL_USERS')
+  @Action(UserAction.GET_USERS)
   async findAll() {
     return this.usersService.findAll();
   }
 
   @Get(':id')
+  @Action(UserAction.GET_USER_BY_ID)
   async findOne(@Param('id') id: number) {
     return this.usersService.findOneById(id);
   }

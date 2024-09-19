@@ -35,11 +35,11 @@ async function bootstrap() {
     .setTitle('NestJs Baseline')
     .setDescription('API documentation for the NestJs Baseline')
     .setVersion('1.0')
+    .addTag('api')
     .build();
 
   const document = SwaggerModule.createDocument(app, options);
-
-  SwaggerModule.setup('api', app, document);
+  SwaggerModule.setup('api/docs', app, document);
 
   await app.listen(process.env.PORT);
 }
