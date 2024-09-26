@@ -1,15 +1,19 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { Role } from 'src/roles/entities/role.entity';
+import { Tenant } from 'src/tenant/tenant.entity';
 
 import { RefreshToken } from '../auth/entities/refresh-token.entity';
+import { UserTenant } from './user-tenant.entity';
 
 @Entity()
 export class User {
@@ -35,7 +39,19 @@ export class User {
   @OneToMany(() => RefreshToken, (refreshToken) => refreshToken.user)
   refreshTokens: RefreshToken[];
 
-  // Optional: If you want to use a unique and nullable identifier
-  // @Column({ unique: true, nullable: true })
-  // sub?: number;
+  // @ManyToMany(() => Tenant, (tenant) => tenant.users)
+  // @JoinTable()
+  // tenants: Tenant[];
+
+  @OneToMany(() => UserTenant, (userTenant) => userTenant.user)
+  userTenants: UserTenant[];
+
+  @CreateDateColumn()
+  createdAt: Date; // Timestamp when the user was created
+
+  @UpdateDateColumn()
+  updatedAt: Date; // Timestamp when the user was last updated
+
+  @Column({ default: true })
+  isActive: boolean; // Status to check if the user is active
 }

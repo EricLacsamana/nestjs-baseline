@@ -1,14 +1,17 @@
 import {
+  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
+  Post,
   Req,
   UseGuards,
 } from '@nestjs/common';
 
 import { Action } from 'src/auth/decorators/action.decorator';
 import { Roles } from 'src/auth/decorators/roles.decorator';
+import { RegisterDto } from 'src/auth/dto/register.dto';
 import { UserRole } from 'src/auth/enums/user-role.enum';
 import { AuthGuards } from 'src/auth/guards/auth.guard';
 
@@ -45,5 +48,18 @@ export class UsersController {
   @Action(UserAction.GET_USER_BY_ID)
   async findOne(@Param('id') id: number) {
     return this.usersService.findOneById(id);
+  }
+
+  @Post()
+  async create(@Body() body: RegisterDto) {
+    const { username, email, password, name, roles } = body;
+
+    return await this.usersService.create({
+      username,
+      email,
+      password,
+      name,
+      roles,
+    });
   }
 }

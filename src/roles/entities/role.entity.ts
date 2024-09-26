@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinTable,
   ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { User } from 'src/users/user.entity';
@@ -28,4 +30,10 @@ export class Role {
 
   @OneToMany(() => RolePermission, (rolePermission) => rolePermission.role)
   rolePermissions: RolePermission[];
+
+  @CreateDateColumn()
+  createdAt: Date; // Timestamp when the role was created
+
+  @UpdateDateColumn()
+  updatedAt: Date; // Timestamp when the role was last updated
 }
