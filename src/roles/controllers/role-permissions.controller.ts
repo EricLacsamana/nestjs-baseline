@@ -1,12 +1,5 @@
-// role-permissions.controller.ts
 import {
-  Body,
   Controller,
-  Delete,
-  // Post,
-  Get,
-  Param,
-  ParseIntPipe,
 } from '@nestjs/common';
 
 import { RolePermissionsService } from '../services/role-permissions.service';

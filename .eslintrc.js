@@ -29,7 +29,7 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     '@typescript-eslint/no-explicit-any': 'warn',
     'no-console': 'warn',
-    'quotes': ['error', 'single'],
+    'quotes': ['error', 'dobule'],
     'semi': ['error', 'always'],
     'max-len': ['warn', { code: 120 }],
     'brace-style': ['error', '1tbs'],

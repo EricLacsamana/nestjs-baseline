@@ -1,5 +1,4 @@
-import { Injectable } from '@nestjs/common';
-import { RequestMethod } from '@nestjs/common';
+import { Injectable, RequestMethod } from '@nestjs/common';
 import { METHOD_METADATA, PATH_METADATA } from '@nestjs/common/constants';
 import { ConfigService } from '@nestjs/config';
 import { DiscoveryService, MetadataScanner, Reflector } from '@nestjs/core';

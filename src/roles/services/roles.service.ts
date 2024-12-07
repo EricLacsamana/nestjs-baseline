@@ -1,10 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository, SelectQueryBuilder } from 'typeorm';
-
-import { QueryParsingService } from 'src/common/services/query-parsing.service';
-import { getRelationsFromInclude } from 'src/common/utils/relation-utils';
-import { RequestContextService } from 'src/request-context/request-context.service';
+import { Repository } from 'typeorm';
+// import { RequestContextService } from 'src/request-context/request-context.service';
 
 import { Role } from '../../roles/entities/role.entity';
 import { RolePermission } from '../../roles/entities/role-permission.entity';

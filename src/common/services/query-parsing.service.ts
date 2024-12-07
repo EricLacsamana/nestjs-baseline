@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository, SelectQueryBuilder } from 'typeorm';
-import { DataSource } from 'typeorm';
+import { DataSource, Repository, SelectQueryBuilder } from 'typeorm';
 
 import { getEntityClassByName } from '../utils/entity-utils';
 
@@ -20,7 +19,6 @@ export class QueryParsingService {
 
     const repository: Repository<any> =
       this.dataSource.getRepository(entityClass);
-    const entityMetadata = repository.metadata;
 
     const nestedRelations = this.buildNestedRelations(relations);
 

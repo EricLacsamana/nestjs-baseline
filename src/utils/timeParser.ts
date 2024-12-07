@@ -1,6 +1,6 @@
 export function parseDuration(duration: string): number {
   const regex = /^(\d+)([smhd])$/;
-  const match = duration.match(regex);
+  const match = regex.exec(duration);
 
   if (!match) {
     throw new Error('Invalid duration format');

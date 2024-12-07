@@ -7,5 +7,7 @@ export class PermissionsController {
   constructor(private readonly permissionsService: PermissionsService) {}
 
   @Get()
-  getPermissions() {}
+  getPermissions() {
+    return { message: 'success' };
+  }
 }
